@@ -1,0 +1,186 @@
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculator</title>
+  <style>
+    * {
+      border: 0px;
+      margin: 0px;
+      box-sizing: border-box;
+      font-size: 7vw;
+      font-weight: 400;
+    }
+
+    body {
+      height: auto;
+      overflow: scroll;
+    }
+
+    #result_container {
+      height: auto;
+      width: 90vw;
+      margin: 0px;
+      margin-inline: auto;
+      padding: 0px;
+      border: 0px solid #8787876c;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      position: absolute;
+      left: 5%;
+      bottom: 64vh;
+    }
+
+    #input_size2 {
+      height: 4vh;
+      width: 100%;
+      border: .0px solid #71717184;
+      background: #8d8d8d00;
+      color: #939393;
+      font-size: 6vw;
+      text-align: right;
+    }
+
+    .input_size2 {
+      margin-bottom: 1vh;
+    }
+
+    #container {
+      height: 64vh;
+      width: 90vw;
+      margin: 0px;
+      margin-inline: auto;
+      padding: 0px;
+      border: 0px solid #f7b5b56c;
+      display: flex;
+      flex-wrap: wrap;
+      position: absolute;
+      left: 5%;
+      bottom: 0px;
+    }
+
+    .input_size {
+      height: 6vh;
+      width: 100%;
+      margin-top: 0vw;
+      margin-bottom: 2vw;
+      /* border: .5px solid #71717184;*/
+      color: black;
+      background: #7d7d7d00;
+      text-align: right;
+    }
+
+    #input {
+      height: 8vh;
+      padding-bottom: 4vw;
+      margin-bottom: 3vw;
+      border-bottom: .5px solid #71717184;
+      font-size: 12vw;
+    }
+
+    #input2 {
+      color: #4b4b4b;
+      font-size: 7vw;
+    }
+
+
+    #row {
+      height: 15vw;
+      width: 100%;
+      margin-bottom: 4vw;
+      border: 0px solid #4ceff1e5;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    #button {
+      height: 15vw;
+      width: 15vw;
+      border-radius: 50%;
+      border: 0px solid;
+      transition: transform 0.2s ease;
+    }
+
+    .gray_button {
+      background: white;
+    }
+
+    .orange_button {
+      background: white;
+      color: #ff772b;
+    }
+
+    .equal_button {
+      color: white;
+      background: #ff772b;
+    }
+
+    .gray_button:active,
+    .orange_button:active {
+      background: #c4c4c43d;
+    }
+
+    .equal_button:active {
+      transform: scale(0.88);
+    }
+  </style>
+</head>
+
+<body>
+
+
+  <div id="result_container">
+  </div>
+
+  <div id="container">
+
+    <input type="text" id="input2" class="input_size" disabled />
+    <input type="text" id="input" class="input_size" placeholder="0" disabled />
+
+    <div id="row">
+      <button id="button" class="orange_button">AC</button>
+      <button id="button" class="orange_button">DE</button>
+      <button id="button" class="orange_button">%</button>
+      <button id="button" class="orange_button">÷</button>
+    </div>
+    <div id="row">
+      <button id="button" class="gray_button">7</button>
+      <button id="button" class="gray_button">8</button>
+      <button id="button" class="gray_button">9</button>
+      <button id="button" class="orange_button">×</button>
+    </div>
+    <div id="row">
+      <button id="button" class="gray_button">4</button>
+      <button id="button" class="gray_button">5</button>
+      <button id="button" class="gray_button">6</button>
+      <button id="button" class="orange_button">-</button>
+    </div>
+    <div id="row">
+      <button id="button" class="gray_button">1</button>
+      <button id="button" class="gray_button">2</button>
+      <button id="button" class="gray_button">3</button>
+      <button id="button" class="orange_button">+</button>
+    </div>
+    <div id="row">
+      <button id="button" class="gray_button">00</button>
+      <button id="button" class="gray_button">0</button>
+      <button id="button" class="gray_button">.</button>
+      <button id="button" class="equal_button">=</button>
+    </div>
+
+  </div>
+
+
+
+
+
+
+
+  <script src="calculator-01.js"> </script>
+
+</body>
+
+</html>

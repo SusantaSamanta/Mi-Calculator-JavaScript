@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic HTML Components</title>
+    <style>
+    #result_container {
+      height: 95vh;
+      width: 90vw;
+      margin-top: 0vh;
+      margin-inline: auto;
+      padding-block: 0vw;
+      padding-inline: 0vw;
+      border: 0px solid #8787876c;
+      border-radius: 3vw;
+      display: flex;
+      flex-wrap: wrap;
+      align-content: flex-end;
+    }
+    #input_size2 {
+      height: 4vh;
+      width: 100%;
+      margin-top: 0vw;
+      margin-bottom: 1vw;
+      border: .5px solid #71717184;
+      background: #8d8d8d00;
+      color: #939393;
+      font-size: 6vw;
+      text-align: right;
+    }
+    
+    </style>
+</head>
+<body>
+    <div id="result_container"></div>
+
+    <script>
+     
+      const result_container = document.getElementById('result_container');
+
+      const result_histry = (result) => {
+        let result_div =document.createElement('div');
+        result_div.id = 'input_size2';
+        result_div.textContent = result;
+        result_container.appendChild(result_div);
+        //container.prepend(itemDiv);
+      }
+      const equation_histry = (equation) => {
+        let equation_div =document.createElement('div');
+        equation_div.id = 'input_size2';
+        equation_div.textContent = equation;
+        result_container.appendChild(equation_div);
+      }
+        
+      equation_histry('3+76-8');
+      result_histry('= 71');
+      equation_histry('3+7-2+89-45');
+      result_histry('= 52');
+      equation_histry('7-6');
+      result_histry('= 1');
+      equation_histry('8+12');
+      result_histry('= 20');
+        
+    </script>
+</body>
+</html>
