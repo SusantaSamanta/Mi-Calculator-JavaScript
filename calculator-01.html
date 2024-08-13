@@ -12,14 +12,15 @@
       font-size: 7vw;
       font-weight: 400;
     }
-
-    body {
-      height: auto;
+  
+    #body2 {
+      height: 90vh;
       overflow: scroll;
+      border: 0px solid green;
     }
 
     #result_container {
-      height: auto;
+      height: auto;        /* 268.2px or 36vh */
       width: 90vw;
       margin: 0px;
       margin-inline: auto;
@@ -36,11 +37,24 @@
     #input_size2 {
       height: 4vh;
       width: 100%;
-      border: .0px solid #71717184;
+      border: 0px solid #71717184;
       background: #8d8d8d00;
       color: #939393;
       font-size: 6vw;
       text-align: right;
+      overflow-y: scroll;
+      white-space: nowrap;
+    }
+    .long_size {
+      height: auto;
+      width: 100%;
+      border: 0px solid #71717184;
+      background: #8d8d8d00;
+      color: #939393;
+      font-size: 6vw;
+      text-align: right;
+      overflow-y: scroll;
+      white-space: wrap;
     }
 
     .input_size2 {
@@ -126,12 +140,19 @@
     .equal_button:active {
       transform: scale(0.88);
     }
+    #bodysize{
+      height: 100vh;
+      width: 100vw;
+      border: 0px solid red;
+    }
   </style>
 </head>
 
 <body>
 
+<div id="body2">
 
+  <div id="bodysize"></div>
   <div id="result_container">
   </div>
 
@@ -172,8 +193,7 @@
     </div>
 
   </div>
-
-
+</div>
 
 
 

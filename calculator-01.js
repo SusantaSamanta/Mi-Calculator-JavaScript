@@ -1,4 +1,16 @@
-let string = "", equal = 0, after_equal_action = 0, action = 0, equation = 0, result = 0;
+let string = "", equal = 0, after_equal_action = 0, action = 0, equation = 0, result = 0, equal_button_count = 0, result_len = 0;
+let viewportHeight2 = window.innerHeight;
+console.log(viewportHeight2);
+
+let body2 = document.getElementById('body2')
+//let viewportHeight = body2.clientHeight;
+//console.log(viewportHeight);
+
+let body3 = document.getElementById('bodysize')
+let viewportHeight = body3.clientHeight;
+
+console.log(viewportHeight+" bodysize");
+
 let display = document.getElementById('input');
 let display2 = document.getElementById('input2');
 
@@ -15,28 +27,42 @@ buttonsArray.forEach((btn) => {
       behavior: 'smooth'
     });
 
-    if (event.target.innerHTML == "DE") {
-      string = string.substring(0, string.length - 1);
-      display2.value = display.value = symbol_changer(string);
+    if(event.target.innerHTML == 'AC'){
+      location.reload();    // it can reload the page
     }
-    else if (event.target.innerHTML == "=") {
+
+    else if (event.target.innerHTML == "DE") {
+      string = string.substring(0, string.length - 1);
+      input_size_adjust(equal, string);
+      display2.value = display.value = symbol_changer(string);
+      scrollLeft();
+    }
+    else if (event.target.innerHTML == "=" && equal_button_count == 0) {  // eq_bu_co == 0 that means that equal button click first time then eq_bu_co++ and not match. if click any other button the eq_bu_co = 0 and condition match.   *** this condition restricted multiple click of equal button.
       equation = string;
       string = eval(string);
       result = display.value = '= ' + string;
+      result_len = result.length;
+      //console.log(result_len);
       equal = 1;
+      input_size_adjust(equal, result);
+      equal_button_count++;
       after_equal_action = 1;
     }
+    
     else if (event.target.innerHTML == "+") {
       string = string + '+'
       string = add_0_before_1st_oper(string);
       string = multiple_oper_checker(string);
       display2.value = display.value = symbol_changer(string);
       equal = 0;
+      input_size_adjust(equal, string);
+      equal_button_count = 0;
       if (after_equal_action == 1) {
         equation_histry(equation);
         result_histry(result);
         after_equal_action = 0;
       }
+      scrollLeft();
     }
     else if (event.target.innerHTML == "-") {
       string = string + '-'
@@ -44,11 +70,14 @@ buttonsArray.forEach((btn) => {
       string = multiple_oper_checker(string);
       display2.value = display.value = symbol_changer(string);
       equal = 0;
+      input_size_adjust(equal, string);
+      equal_button_count = 0;
       if (after_equal_action == 1) {
         equation_histry(equation);
         result_histry(result);
         after_equal_action = 0;
       }
+      scrollLeft();
     }
     else if (event.target.innerHTML == "×") {
       string = string + '*';
@@ -56,11 +85,14 @@ buttonsArray.forEach((btn) => {
       string = multiple_oper_checker(string);
       display2.value = display.value = symbol_changer(string);
       equal = 0;
+      input_size_adjust(equal, string);
+      equal_button_count = 0;
       if (after_equal_action == 1) {
         equation_histry(equation);
         result_histry(result);
         after_equal_action = 0;
       }
+      scrollLeft();
     }
     else if (event.target.innerHTML == "÷") {
       string = string + '/';
@@ -68,11 +100,14 @@ buttonsArray.forEach((btn) => {
       string = multiple_oper_checker(string);
       display2.value = display.value = symbol_changer(string);
       equal = 0;
+      input_size_adjust(equal, string);
+      equal_button_count = 0;
       if (after_equal_action == 1) {
         equation_histry(equation);
         result_histry(result);
         after_equal_action = 0;
       }
+      scrollLeft();
     }
     else if (event.target.innerHTML == "%") {
       string = string + '%';
@@ -80,11 +115,14 @@ buttonsArray.forEach((btn) => {
       string = multiple_oper_checker(string);
       display2.value = display.value = symbol_changer(string);
       equal = 0;
+      input_size_adjust(equal, string);
+      equal_button_count = 0;
       if (after_equal_action == 1) {
         equation_histry(equation);
         result_histry(result);
         after_equal_action = 0;
       }
+      scrollLeft();
     }
 
     else if (event.target.innerHTML == ".") {
@@ -93,27 +131,33 @@ buttonsArray.forEach((btn) => {
       string = multiple_oper_checker(string);
       display2.value = display.value = symbol_changer(string);
       equal = 0;
+      input_size_adjust(equal, string);
+      equal_button_count = 0;
       if (after_equal_action == 1) {
         equation_histry(equation);
         result_histry(result);
         after_equal_action = 0;
       }
+      scrollLeft();
     }
 
     else if (num_checker(event.target.innerHTML)) {
       if (equal == 1) {   // after equal button press if num button press then previous string clear 
         string = '';
         equal = 0;
+        result_len = 0; // afre equal result set  length 0.
       }
+      equal_button_count = 0;
       if (after_equal_action == 1) {
         equation_histry(equation);
         result_histry(result);
         after_equal_action = 0;
       }
       string += event.target.innerHTML;
+      string = max_num_input_checker(string);
+      input_size_adjust(equal, string);
       display2.value = display.value = symbol_changer(string);
-      // if(after_equal_action == 1)
-      // action = 1;
+      scrollLeft();
     }
 
 
@@ -182,8 +226,74 @@ const num_checker = (num) => {
 
 const result_container = document.getElementById('result_container');
 let container = document.getElementById('container');
-let top_value_increment = 38;  // intialy container position 36vw fron top 
-let top_value = 0;
+const clientHeight = container.clientHeight;
+console.log(clientHeight)
+
+let top_value_increment = 36;  // intialy container position 36vw fron top 
+let max_length_test = 0;
+let equation_histry_fun_count = 0;
+let only_1st = 0;
+const equation_histry = (equation) => {
+  equation_histry_fun_count++;
+  if(equation.length > 26){
+  
+    let long_equation_div = document.createElement('div');
+    long_equation_div.className = `long_size`;
+    //long_equation_div.id = `long_size1`;
+    long_equation_div.textContent = symbol_changer(equation);
+    result_container.appendChild(long_equation_div);
+    
+    let long = (long_equation_div.clientHeight / viewportHeight) * 100;      // long_equation_div height in vh 
+    console.log(long+' long')
+    max_length_test = max_length_test+long+5;
+   
+    if(max_length_test > 36){
+     // viewportHeight = window.innerHeight;
+      console.log(viewportHeight);
+      result_container.style.top = '1vh';
+      only_1st++;
+      if(only_1st==1){
+        let long2 = max_length_test - 36;   
+        top_value_increment = top_value_increment+long2;
+      }
+      else{
+        top_value_increment = top_value_increment+5+long;
+      }
+        let top_value = top_value_increment;
+        container.style.top = top_value + 'vh';
+        console.log(top_value_increment+'  tvi');
+        console.log(top_value+'tv');
+    }
+    
+  }
+  else{
+    let equation_div = document.createElement('div');
+    equation_div.id = 'input_size2';
+    equation_div.textContent = symbol_changer(equation);
+    result_container.appendChild(equation_div);
+    equation_div.scrollLeft = equation_div.scrollWidth;       // scroll left side of the equation 
+    max_length_test = max_length_test+5+4;   // result_div+padding + equation_div
+    //console.log(max_length_test+'max')
+    if(max_length_test > 36){
+      result_container.style.top = '1vh';
+      only_1st++;
+      if(only_1st== 1){
+        let long2 = max_length_test - 36;
+        top_value_increment = top_value_increment+long2;
+      }else{
+        top_value_increment = top_value_increment+5+4;
+      }
+        let top_value = top_value_increment;
+        container.style.top = top_value + 'vh';  
+    }
+  }
+
+  window.scrollTo({       // scroll to end 
+    top: document.body.scrollHeight
+  });
+}
+
+
 
 let result_histry_fun_count = 0;
 
@@ -194,14 +304,6 @@ const result_histry = (result) => {
   result_div.textContent = result;
   result_container.appendChild(result_div); // append result_div height 4vh 
 
-  result_histry_fun_count++;
-  if (result_histry_fun_count > 4) {           // after 4 append of result_div then container move
-    top_value_increment = top_value_increment + 9;
-    top_value = top_value_increment;
-    container.style.top = top_value + 'vh';
-    console.log("hello ")        // after append  result_div, container move 38+9vh... from top     
-  }
-  console.log(result_histry_fun_count)
 
   window.scrollTo({       // after result_div append and container move from top page will auto scroll to end
     top: document.body.scrollHeight
@@ -209,30 +311,59 @@ const result_histry = (result) => {
 }
 
 
-let equation_histry_fun_count = 0;
 
-const equation_histry = (equation) => {
-  let equation_div = document.createElement('div');
-  equation_div.id = 'input_size2';
-  equation_div.textContent = symbol_changer(equation);
-  result_container.appendChild(equation_div);
 
-  equation_histry_fun_count++;
-  if (equation_histry_fun_count == 5) {           // after 4 append of result_div then container move
-    result_container.style.top = '2vh';          // after append  result_div, container move only 2vh from top. then it extend to bottom   
+const max_num_input_checker = (string) =>{
+  let b = a = string, i = result_len-1;       // result_len is the length of the result after equal. 
+  for(i; i<string.length; i++){
+    if( num_checker(a[i]) && 
+        num_checker(a[i+1]) && 
+        num_checker(a[i+2]) && 
+        num_checker(a[i+3]) && 
+        num_checker(a[i+4]) && 
+        num_checker(a[i+5]) && 
+        num_checker(a[i+6]) && 
+        num_checker(a[i+7]) && 
+        num_checker(a[i+8]) && 
+        num_checker(a[i+9]) ){
+      a = a.substring(0, a.length-1);
+      return a;
+    }
   }
+  //console.log('hello')
+  return b;
+}
 
 
-  window.scrollTo({       // scroll to end 
-    top: document.body.scrollHeight
-  });
+
+const input_size_adjust = (equal, string) => {
+  if(equal == 0 && string.length > 13){
+    input.style.fontSize = '8vw';
+  }
+  else if(equal == 0 && string.length < 13){
+    input.style.fontSize = '12vw';
+  }
+  else if(equal == 1 && string.length > 13){
+    input.style.fontSize = '8vw';
+  }
+  else if(equal == 1 && string.length < 13){
+    input.style.fontSize = '12vw';
+  }
+}
+//console.log()
+
+
+
+const scrollLeft = () => {
+  display.scrollLeft = display.scrollWidth;
+  display2.scrollLeft = display2.scrollWidth;
 }
 
 
 window.onload = function () {
-  window.scrollTo(0, document.body.scrollHeight); // Scroll to the bottom when the page loads
+  window.scrollTo(0, viewportHeight); // Scroll to the bottom when the page loads
 };
-
+console.log(viewportHeight+'  Scroll')
 
 
 // window.scrollTo({
@@ -244,16 +375,4 @@ window.onload = function () {
 
 
 
-//   document.addEventListener('DOMContentLoaded',(event) => {
-//   let string = "";
-//   let buttons = document.querySelectorAll('.button');
-//   Array.from(buttons).forEach((button) => {
-//     button.addEventListener('click', (e) => {
-//       console.log(e.target)
-//     })
-//   })
-// })
-//   console.log("hello")
-
-
-
+//  (div-height / viewportHeight) * 100 = vh
